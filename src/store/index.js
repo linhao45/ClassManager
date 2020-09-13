@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-      username: '123'
+      username: '123',
+      downloadURL: 'http://api.jitclass.cn/file/a/download/',
   },
   mutations: {
       setUsername(state, username) {

@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import fileDownload from 'js-file-download'
+import fileDownload from "js-file-download";
 export default {
     data() {
         return {
@@ -104,10 +104,10 @@ export default {
             ],
             // 请求头token
             header: {
-                token: window.sessionStorage.getItem('token')
+                token: window.sessionStorage.getItem("token"),
             },
             // 上传地址
-            uploadURL: 'http://api.jitclass.cn/file/upload'
+            uploadURL: "http://api.jitclass.cn/file/upload",
         };
     },
     created() {
@@ -118,13 +118,17 @@ export default {
         async getTasksList() {
             let flag = false;
             const res = await this.$http.get("/user/userTasks");
-            if (res.data.code != 200) return this.$message.error("获取任务失败");
-            console.log(res);
+            if (res.data.code != 200)
+                return this.$message.error("获取任务失败");
+            // console.log(res);
             // 循环遍历 获取用户发布任务的详细信息
             for (let i = 0; i < res.data.data.doneTasks.length; ++i) {
                 let params = new URLSearchParams();
-                params.append('taskId', res.data.data.doneTasks[i])
-                const task = await this.$http.post("/user/taskIdToTask", params);
+                params.append("taskId", res.data.data.doneTasks[i]);
+                const task = await this.$http.post(
+                    "/user/taskIdToTask",
+                    params
+                );
                 if (task.data.code != 200) flag = true;
                 this.tasklist.push(task.data.data);
             }
@@ -143,14 +147,18 @@ export default {
         // 下载文件
         async downloadById(id) {
             let params = new URLSearchParams();
-            params.append('taskId', id);
-            const resp = await this.$http.post('/file/download/msg', params);
-            // console.log(resp);
-            let filename = resp.data.data;
-            this.$http.post('/file/download', params, {responseType: 'arraybuffer'}).then(res => {
-                console.log(res);
-                fileDownload(res.data, filename);
-            })
+            params.append("taskId", id);
+            const res = await this.$http.post("/file/download", params);
+            const uuid = res.data.data;
+
+            let a = document.createElement("a");
+            a.href =
+                `${this.$store.state.downloadURL}` +
+                uuid;
+            document.body.appendChild(a);
+            a.click(); //下载
+            URL.revokeObjectURL(a.href); // 释放URL 对象
+            document.body.removeChild(a); // 删除 a 标签
         },
         // 刷新页面
         reload() {

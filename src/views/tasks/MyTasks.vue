@@ -516,19 +516,22 @@ export default {
         },
         // 下载单人文件
         async downloadById(taskId, userId) {
-            // console.log('id1');
-            // console.log(id1);
-            // console.log('id2', id2);
             let params = new URLSearchParams();
-            params.append('taskId', taskId);
+            params.append("taskId", taskId);
             params.append('userId', userId);
-            const resp = await this.$http.post('/file/download/msg', params);
-            // console.log(resp);
-            let filename = resp.data.data;
-            this.$http.post('/file/download', params, {responseType: 'arraybuffer'}).then(res => {
-                console.log(res);
-                fileDownload(res.data, filename);
-            })
+            const res = await this.$http.post("/file/download", params);
+            // console.log(res);
+            const uuid = res.data.data;
+
+            let a = document.createElement("a");
+            a.href =
+                `${this.$store.state.downloadURL}` +
+                uuid;
+            console.log(a.href);
+            document.body.appendChild(a);
+            a.click(); //下载
+            URL.revokeObjectURL(a.href); // 释放URL 对象
+            document.body.removeChild(a); // 删除 a 标签
         },
     },
 };
