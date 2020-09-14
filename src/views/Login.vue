@@ -42,7 +42,7 @@
                 >
                     <el-row>
                         <el-col :span="17">
-                            <el-form-item label="用户名:" prop="username">
+                            <el-form-item label="邮箱:" prop="username">
                                 <el-input placeholder="请输入邮箱作为用户名" v-model="rigsterForm.username"></el-input>
                             </el-form-item>
                         </el-col>
@@ -51,10 +51,15 @@
                             <el-button @click="getVerfiCode">获取邮箱验证码</el-button>
                         </el-col>
                     </el-row>
+                    <span></span>
                     <el-row>
                         <el-col :span="11">
-                            <el-form-item label="验证码:" prop="verficationCode">
-                                <el-input placeholder="请输入邮箱验证码" v-model="verfiCode"></el-input>
+                            <el-form-item label="验证码:" prop="checkCode">
+                                <el-input
+                                    placeholder="请输入邮箱验证码"
+                                    v-model="rigsterForm.checkCode"
+                                    auto-complete="new-password"
+                                ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -93,7 +98,18 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="学校:" prop="school">
-                                <el-input placeholder="请输入学校名称" v-model="rigsterForm.school"></el-input>
+                                <el-select
+                                    v-model="rigsterForm.school"
+                                    placeholder="请选择学校"
+                                    style="width: 85%;"
+                                >
+                                    <el-option
+                                        v-for="item in schools"
+                                        :key="item.label"
+                                        :label="item.label"
+                                        v-model="item.value"
+                                    ></el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -130,14 +146,6 @@ export default {
             if (regEmail.test(value)) return callback();
             callback(new Error("请输入正确的邮箱！"));
         };
-        // 验证邮箱验证码
-        var checkVerficationCode = (rule, value, callback) => {
-            if (!this.checkCode()) {
-                console.log(this.checkCode());
-                callback("验证码错误");
-            }
-            callback();
-        };
         return {
             // 登录表单数据绑定
             loginForm: {
@@ -151,6 +159,7 @@ export default {
                 nickname: "",
                 studentNumber: "",
                 school: "",
+                checkCode: "",
             },
             // 邮箱验证码
             verfiCode: "",
@@ -193,10 +202,10 @@ export default {
                     { validator: checkEmail, trigger: "blur" },
                 ],
                 // 邮箱验证码
-                verficationCode: [
+                checkCode: [
                     {
                         required: true,
-                        validator: checkVerficationCode,
+                        message: "请输入验证码",
                         trigger: "blur",
                     },
                 ],
@@ -215,7 +224,9 @@ export default {
                     },
                 ],
                 // 验证两次输入的密码是否正确
-                checkpassword: [{ validator: checkpass, trigger: "blur" }],
+                checkpassword: [
+                    { required: true, validator: checkpass, trigger: "blur" },
+                ],
                 // 学号
                 studentNumber: [
                     { required: true, message: "请输入学号", trigger: "blur" },
@@ -227,6 +238,13 @@ export default {
             },
             // 注册对话框的是否显示
             rigsterDialogVisible: false,
+            // 学校
+            schools: [
+                {
+                    label: '金陵科技学院',
+                    value: 'JIT',
+                }
+            ]
         };
     },
     methods: {
@@ -240,9 +258,7 @@ export default {
                 let param = new URLSearchParams();
                 param.append("username", this.loginForm.username);
                 param.append("password", this.loginForm.password);
-                const res = await this.$http.post('/login', param);
-                
-                // const res = await this.$http.post('/login', this.loginForm);
+                const res = await this.$http.post("/login", param);
 
                 console.log(res);
 
@@ -262,32 +278,39 @@ export default {
             });
         },
         // 注册，提交表单
-        rigsterFormSubmit() {
+        async rigsterFormSubmit() {
             this.$refs.rigsterFormRef.validate(async (valid) => {
                 // console.log(valid);
                 if (!valid) {
                     return this.$message.error("注册信息不合法");
                 }
-                const result = await this.$http.post("sign", this.rigsterForm);
+                let param = new URLSearchParams();
+                param.append("verificationCode", this.rigsterForm.checkCode);
+                const res = await this.$http.post(
+                    `/sign/verityCode/${this.rigsterForm.username}`,
+                    param
+                );
                 // console.log(res);
-                if (result.code !== 200) {
-                    return this.$message.error(result.msg);
-                }
-                this.$message.success("登录成功");
+                if(res.data.code !== 200) return this.$message.error('验证码与用户名不匹配');
+
+
+                let params = new URLSearchParams();
+                params.append('username', this.rigsterForm.username);
+                params.append('password', this.rigsterForm.password);
+                params.append('nickname	', this.rigsterForm.nickname);
+                params.append('studentNumber', this.rigsterForm.studentNumber);
+                params.append('school', this.rigsterForm.school);
+                const res2 = await this.$http.post('/sign', params);
+                console.log(res2);
+                if(res2.data.code !== 200) return this.$message.error(res2.data.msg);
+                this.$message.success('注册成功');
+                this.$refs.rigsterFormRef.resetFields();
+                this.rigsterDialogVisible = false;
             });
         },
         // 控制注册对话框的显示关闭
         changeRigsterDialog() {
             this.rigsterDialogVisible = !this.rigsterDialogVisible;
-        },
-        // 检查验证码是否正确
-        async checkCode() {
-            const data = await this.$http.post(
-                `sign/verityCode/${this.rigsterForm.username}`,
-                this.verfiCode
-            );
-            if (data.code !== 200) return false;
-            return true;
         },
         // 获取邮箱验证码
         async getVerfiCode() {
@@ -295,11 +318,13 @@ export default {
             var regEmail = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
             if (!regEmail.test(this.rigsterForm.username))
                 return this.$message.error("请填写正确的邮箱地址");
-            const data = await this.$http.get(
+            const res = await this.$http.get(
                 `sign/sendVerificationCode/${this.rigsterForm.username}`
             );
-            if (data.code !== 200) return this.$message.error("发送请求错误");
-            return this.$message.success("发送成功，请尽快前往邮箱获取");
+            // console.log(res);
+            if (res.data.code !== 200)
+                return this.$message.error("发送请求错误");
+            this.$message.success("发送成功，请前往邮箱获取验证码");
         },
     },
 };

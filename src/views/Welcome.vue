@@ -2,7 +2,6 @@
     <div class="img_container">
         <div class="word_container">
             <div class="words">
-                班级管理系统
                 <br />
                 <br />
                 <br />
@@ -33,7 +32,7 @@ export default {
     background-image: url(http://picture.youaremine.vip/yesterday.php);
 }
 .word_container {
-    width: 800px;
+    width: 100%-20px;
     height: 600px;
     margin: auto;
     color: white;
