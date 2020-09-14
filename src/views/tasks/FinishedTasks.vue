@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="padding_limit">
         <!-- 面包屑导航 -->
         <el-breadcrumb>
             <el-breadcrumb-item :to="{ path: '/taskfinished' }">已完成</el-breadcrumb-item>

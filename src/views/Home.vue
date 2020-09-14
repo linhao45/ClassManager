@@ -24,12 +24,12 @@
                     :collapse="isCollapse"
                     :collapse-transition="true"
                 >
-                    <el-menu-item index="/welcome" @click="saveNavState('/'+subitem.path)">
+                    <el-menu-item index="/welcome" @click="saveNavState('/welcome')">
                         <i class="el-icon-s-home"></i>
                         <span>首页</span>
                     </el-menu-item>
                     <!-- 一级菜单 -->
-                    <el-submenu :index="'/'+item.path" v-for="item in menulist" :key="item.id">
+                    <el-submenu v-for="item in menulist" :key="item.id" :index="'/'+item.path">
                         <template slot="title">
                             <!-- 图标 -->
                             <i :class="item.icon"></i>
@@ -38,9 +38,9 @@
                         </template>
                         <!-- 二级菜单 -->
                         <el-menu-item
-                            :index=" '/'+subitem.path "
                             v-for="subitem in item.children"
                             :key="subitem.id"
+                            :index="'/'+subitem.path"
                             @click="saveNavState('/'+subitem.path)"
                         >
                             <i :class="subitem.icon"></i>
@@ -62,88 +62,96 @@
 export default {
     data() {
         return {
-            // （开发临时用）管理员用户 侧边栏功能列表
-            tmpmenulist1: [
-                {
-                    authname: "班级作业",
-                    icon: "el-icon-s-order",
-                    id: 1,
-                    path: "tasks",
-                    children: [
-                        {
-                            authname: "我的发布",
-                            icon: "el-icon-circle-plus",
-                            id: 11,
-                            path: "mytasks",
-                        },
-                        {
-                            authname: "已完成",
-                            icon: "el-icon-check",
-                            id: 13,
-                            path: "taskfinished",
-                        },
-                        {
-                            authname: "未完成",
-                            icon: "el-icon-close",
-                            id: 14,
-                            path: "taskunfinished",
-                        },
-                    ],
-                },
-                {
-                    authname: "个人信息",
-                    icon: "el-icon-user-solid",
-                    id: 2,
-                    path: "info",
-                    children: [
-                        {
-                            authname: "查看个人信息",
-                            icon: "el-icon-info",
-                            id: 20,
-                            path: "lookinfo",
-                        },
-                    ],
-                },
-            ],
-            // （开发临时用）普通用户 权限列表
-            tmpmenulist2: [
-                {
-                    authname: "班级作业",
-                    icon: "el-icon-s-order",
-                    id: 1,
-                    path: "tasks",
-                    children: [
-                        {
-                            authname: "已完成",
-                            icon: "el-icon-check",
-                            id: 13,
-                            path: "taskfinished",
-                        },
-                        {
-                            authname: "未完成",
-                            icon: "el-icon-close",
-                            id: 14,
-                            path: "taskunfinished",
-                        },
-                    ],
-                },
-                {
-                    authname: "个人信息",
-                    icon: "el-icon-user-solid",
-                    id: 2,
-                    path: "info",
-                    children: [
-                        {
-                            authname: "查看个人信息",
-                            icon: "el-icon-info",
-                            id: 20,
-                            path: "lookinfo",
-                        },
-                    ],
-                },
-            ],
+            // // （开发临时用）管理员用户 侧边栏功能列表
+            // tmpmenulist1: [
+            //     {
+            //         authname: "班级作业",
+            //         icon: "el-icon-s-order",
+            //         id: 1,
+            //         path: "tasks",
+            //         children: [
+            //             {
+            //                 authname: "我的发布",
+            //                 icon: "el-icon-circle-plus",
+            //                 id: 11,
+            //                 path: "mytasks",
+            //             },
+            //             {
+            //                 authname: "已完成",
+            //                 icon: "el-icon-check",
+            //                 id: 13,
+            //                 path: "taskfinished",
+            //             },
+            //             {
+            //                 authname: "未完成",
+            //                 icon: "el-icon-close",
+            //                 id: 14,
+            //                 path: "taskunfinished",
+            //             },
+            //         ],
+            //     },
+            //     {
+            //         authname: "个人信息",
+            //         icon: "el-icon-user-solid",
+            //         id: 2,
+            //         path: "info",
+            //         children: [
+            //             {
+            //                 authname: "查看个人信息",
+            //                 icon: "el-icon-info",
+            //                 id: 20,
+            //                 path: "lookinfo",
+            //             },
+            //         ],
+            //     },
+            // ],
+            // // （开发临时用）普通用户 权限列表
+            // tmpmenulist2: [
+            //     {
+            //         authname: "班级作业",
+            //         icon: "el-icon-s-order",
+            //         id: 1,
+            //         path: "tasks",
+            //         children: [
+            //             {
+            //                 authname: "已完成",
+            //                 icon: "el-icon-check",
+            //                 id: 13,
+            //                 path: "taskfinished",
+            //             },
+            //             {
+            //                 authname: "未完成",
+            //                 icon: "el-icon-close",
+            //                 id: 14,
+            //                 path: "taskunfinished",
+            //             },
+            //         ],
+            //     },
+            //     {
+            //         authname: "个人信息",
+            //         icon: "el-icon-user-solid",
+            //         id: 2,
+            //         path: "info",
+            //         children: [
+            //             {
+            //                 authname: "查看个人信息",
+            //                 icon: "el-icon-info",
+            //                 id: 20,
+            //                 path: "lookinfo",
+            //             },
+            //         ],
+            //     },
+            // ],
             // 菜单列表
-            menulist: [],
+            menulist: [
+                 {
+                    authname: "",
+                    icon: "",
+                    id: 1,
+                    path: "",
+                    children: []
+                },
+            ],
             // 激活态的左侧按钮
             activePath: "",
             // 菜单栏是否折叠

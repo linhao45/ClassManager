@@ -32,3 +32,11 @@ body,
 body .el-table th.gutter {
     display: table-cell !important
 }
+
+.el-main {
+    padding: 5px;
+}
+
+.padding_limit {
+    padding: 15px;
+}

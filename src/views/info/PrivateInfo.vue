@@ -1,5 +1,5 @@
 <template>
-    <div class="info_container">
+    <div class="info_container padding_limit">
         <div class="info_box">
             <div class="avater_box">
                 <el-avatar :size="110"></el-avatar>

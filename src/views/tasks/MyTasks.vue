@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="padding_limit">
         <!-- 面包屑导航 -->
         <el-breadcrumb>
             <el-breadcrumb-item :to="{ path: '/tasklaunch' }">我的发布</el-breadcrumb-item>
