@@ -63,48 +63,54 @@ export default {
     data() {
         return {
             // // （开发临时用）管理员用户 侧边栏功能列表
-            // tmpmenulist1: [
-            //     {
-            //         authname: "班级作业",
-            //         icon: "el-icon-s-order",
-            //         id: 1,
-            //         path: "tasks",
-            //         children: [
-            //             {
-            //                 authname: "我的发布",
-            //                 icon: "el-icon-circle-plus",
-            //                 id: 11,
-            //                 path: "mytasks",
-            //             },
-            //             {
-            //                 authname: "已完成",
-            //                 icon: "el-icon-check",
-            //                 id: 13,
-            //                 path: "taskfinished",
-            //             },
-            //             {
-            //                 authname: "未完成",
-            //                 icon: "el-icon-close",
-            //                 id: 14,
-            //                 path: "taskunfinished",
-            //             },
-            //         ],
-            //     },
-            //     {
-            //         authname: "个人信息",
-            //         icon: "el-icon-user-solid",
-            //         id: 2,
-            //         path: "info",
-            //         children: [
-            //             {
-            //                 authname: "查看个人信息",
-            //                 icon: "el-icon-info",
-            //                 id: 20,
-            //                 path: "lookinfo",
-            //             },
-            //         ],
-            //     },
-            // ],
+            tmpmenulist1: [
+                {
+                    authname: "班级作业",
+                    icon: "el-icon-s-order",
+                    id: 1,
+                    path: "tasks",
+                    children: [
+                        {
+                            authname: "我的发布",
+                            icon: "el-icon-circle-plus",
+                            id: 11,
+                            path: "mytasks",
+                        },
+                        {
+                            authname: "已完成",
+                            icon: "el-icon-check",
+                            id: 13,
+                            path: "taskfinished",
+                        },
+                        {
+                            authname: "未完成",
+                            icon: "el-icon-close",
+                            id: 14,
+                            path: "taskunfinished",
+                        },
+                    ],
+                },
+                {
+                    authname: "信息管理",
+                    icon: "el-icon-user-solid",
+                    id: 2,
+                    path: "info",
+                    children: [
+                        {
+                            authname: "查看个人信息",
+                            icon: "el-icon-info",
+                            id: 20,
+                            path: "lookinfo",
+                        },
+                        {
+                            authname: "班委更换",
+                            icon: "el-icon-coordinate",
+                            id: 21,
+                            path: "managers",
+                        }
+                    ],
+                },
+            ],
             // // （开发临时用）普通用户 权限列表
             // tmpmenulist2: [
             //     {

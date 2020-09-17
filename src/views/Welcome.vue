@@ -2,10 +2,7 @@
     <div class="img_container">
         <div class="word_container">
             <div class="words">
-                <br />
-                <br />
-                <br />
-                <div style="text-align: right;">
+                <div class="infomation">
                     <p>StarkFarm创新实验室</p>
                     <p>前端：吴泽华</p>
                     <p>后端：马世龙<br />陈媛媛<br />杜雅琴</p>
@@ -29,10 +26,10 @@ export default {
 .img_container {
     width: 100%;
     height: 100%;
-    background-image: url(http://picture.youaremine.vip/yesterday.php);
+    background-image: url(/img/yesterday.php);
+    position: relative;
 }
 .word_container {
-    width: 100%-20px;
     height: 600px;
     margin: auto;
     color: white;
@@ -50,5 +47,11 @@ export default {
 }
 .words span {
     margin: 10px;
+}
+.infomation {
+    position: absolute;
+    right: 55px;
+    bottom: 40px;
+    text-align: right;
 }
 </style>

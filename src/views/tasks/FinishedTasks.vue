@@ -107,7 +107,7 @@ export default {
                 token: window.sessionStorage.getItem("token"),
             },
             // 上传地址
-            uploadURL: "http://api.jitclass.cn/file/upload",
+            uploadURL: "https://api.jitclass.cn/file/upload",
         };
     },
     created() {
@@ -150,7 +150,6 @@ export default {
             params.append("taskId", id);
             const res = await this.$http.post("/file/download", params);
             const uuid = res.data.data;
-
             let a = document.createElement("a");
             a.href =
                 `${this.$store.state.downloadURL}` +

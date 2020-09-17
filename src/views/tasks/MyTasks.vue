@@ -346,10 +346,9 @@ export default {
                     { required: true, message: "请选择命名格式", trigger: "blur", },
                 ]
             },
-
         };
     },
-    created() {
+    async created() {
         this.getTasksList();
     },
     methods: {
@@ -365,31 +364,26 @@ export default {
             } else {
                 that.expandList = [];
             }
-            console.log(row);
-            // 获取已完成用户、未完成用户的详细信息
-            // this.unDoPeop.splice(0, this.unDoPeop.length);
-            // this.DonePeop.splice(0, this.DonePeop.length);
             let tmpunDoPeop = [];
             let tmpDonePeop = [];
             for(let i = 0; i < row.undoIds.length; ++i) {
-                const user = await this.$http.get('/user/toStudent', {
-                    userId: row.undoIds[i]
-                })
+                let params = new URLSearchParams();
+                params.append('userId', row.undoIds[i])
+                let user = await this.$http.post('/user/toStudent', params);
+                console.log(user);
                 if(user.data.code != 200) flag = true;
                 else tmpunDoPeop.push(user.data.data);
             }
-             for(let i = 0; i < row.doneIds.length; ++i) {
-                const user = await this.$http.get('/user/toStudent', {
-                    userId: row.doneIds[i]
-                })
+            for(let i = 0; i < row.doneIds.length; ++i) {
+                let params = new URLSearchParams();
+                params.append('userId', row.doneIds[i])
+                const user = await this.$http.post('/user/toStudent', params)
                 if(user.data.code != 200) flag = true;
                 else tmpDonePeop.push(user.data.data);
             }
             if(flag)    this.$message.error('获取信息出现错误');
             this.unDoPeop = tmpunDoPeop;
             this.DonePeop = tmpDonePeop;
-            console.log(this.unDoPeop);
-            console.log(this.DonePeop);
         },
         // 获取任务列表
         async getTasksList() {
@@ -522,7 +516,6 @@ export default {
             const res = await this.$http.post("/file/download", params);
             // console.log(res);
             const uuid = res.data.data;
-
             let a = document.createElement("a");
             a.href =
                 `${this.$store.state.downloadURL}` +

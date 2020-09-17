@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data() {
         // 验证密码
@@ -334,7 +335,7 @@ export default {
 .login_container {
     background-color: #2b4b6b;
     height: 100%;
-    background-image: url(http://picture.youaremine.vip/today.php);
+    background-image: url(/img/today.php);
 }
 
 .login_box {
