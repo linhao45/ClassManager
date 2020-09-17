@@ -12,7 +12,7 @@ import 'nprogress/nprogress.css'
 Vue.config.productionTip = false
 
 // 配置请求根路径
-axios.defaults.baseURL = 'http://test1.jitclass.cn'
+axios.defaults.baseURL = 'http://api.jitclass.cn'
 
 // 在request拦截器中，展示进度条 NProgress.start()
 axios.interceptors.request.use(config => {

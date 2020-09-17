@@ -107,7 +107,7 @@ export default {
                 token: window.sessionStorage.getItem("token"),
             },
             // 上传地址
-            uploadURL: "http://test1.jitclass.cn/file/upload",
+            uploadURL: "http://api.jitclass.cn/file/upload",
         };
     },
     created() {
