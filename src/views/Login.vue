@@ -21,6 +21,7 @@
                         v-model="loginForm.password"
                         prefix-icon="el-icon-lock"
                         type="password"
+                        @keyup.enter.native="loginFormSubmit"
                     ></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
@@ -265,7 +266,7 @@ export default {
 
                 // 判断登录状态
                 if (res.data.code != 200) {
-                    return this.$message.error("登陆失败");
+                    return this.$message.error(res.data.data.msg);
                 }
                 this.$message.success("登录成功");
 
@@ -302,7 +303,6 @@ export default {
                 params.append('studentNumber', this.rigsterForm.studentNumber);
                 params.append('school', this.rigsterForm.school);
                 const res2 = await this.$http.post('/sign', params);
-                console.log(res2);
                 if(res2.data.code !== 200) return this.$message.error(res2.data.msg);
                 this.$message.success('注册成功');
                 this.$refs.rigsterFormRef.resetFields();
@@ -322,7 +322,6 @@ export default {
             const res = await this.$http.get(
                 `sign/sendVerificationCode/${this.rigsterForm.username}`
             );
-            // console.log(res);
             if (res.data.code !== 200)
                 return this.$message.error("发送请求错误");
             this.$message.success("发送成功，请前往邮箱获取验证码");

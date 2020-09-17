@@ -27,6 +27,7 @@
                 </el-form-item>
                 <el-form-item class="btns">
                     <el-button @click="handleSubmit" type="primary">修改</el-button>
+                    <el-button @click="logout()">退出</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -130,6 +131,10 @@ export default {
                 return this.$message.success("修改成功");
             }
         },
+        logout() {
+            window.sessionStorage.removeItem('token');
+            this.$router.push("/admin");
+        }
     },
 };
 </script>

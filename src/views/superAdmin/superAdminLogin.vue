@@ -21,6 +21,7 @@
                         v-model="loginForm.password"
                         prefix-icon="el-icon-lock"
                         type="password"
+                        @keyup.enter.native="loginFormSubmit"
                     ></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
     data() {
         return {
@@ -87,20 +88,21 @@ export default {
                 param.append("password", this.loginForm.password);
                 const res = await this.$http.post("/admin/login", param);
 
-                console.log(res);
-
                 // 判断登录状态
                 if (res.data.code != 200) {
                     return this.$message.error("登陆失败");
                 }
-                this.$message.success("登录成功");
 
-                // 保存用户名信息到store，方便后续二次验证直接调取用户名
-                this.$store.commit("setUsername", this.loginForm.username);
-
-                // 保存token
-                // 实现编程式导航跳转到'home'
                 window.sessionStorage.setItem("token", res.data.data.token);
+
+                const res2 = await this.$http.get("/user/isAdmin");
+
+                if (res2.data.code !== 200) {
+                    return this.$message.error("用户密码错误");
+                    window.sessionStorage.removeItem("token");
+                }
+                this.$message.success("登录成功");
+                this.$store.commit("setUsername", this.loginForm.username);
                 this.$router.push("/adminmanager");
             });
         },

@@ -46,7 +46,7 @@
                 <!-- 操作 -->
                 <el-table-column align="center" label="操作" :resizable="false">
                     <template v-slot="scope">
-                        <el-upload :headers="header" :action="uploadURL" :data="{taskId: scope.row.taskId}" :on-success="reload" :on-remove="reload">
+                        <el-upload :headers="header" :action="uploadURL" :data="{taskId: scope.row.taskId}" :before-upload="beforeUpload" :on-success="getTasksList">
                             <el-button icon="el-icon-upload2" type="primary">点击上传</el-button>
                         </el-upload>
                     </template>
@@ -94,7 +94,7 @@ export default {
                 token: window.sessionStorage.getItem('token')
             },
             // 上传地址
-            uploadURL: 'https://api.jitclass.cn/file/upload'
+            uploadURL: 'http://test1.jitclass.cn/file/upload'
         };
     },
     created() {
@@ -103,10 +103,12 @@ export default {
     methods: {
         // 获取任务列表
         async getTasksList() {
+            this.tasklist = [];
             let flag = false;
             const res = await this.$http.get("/user/userTasks");
+            console.log(res.data.data.undoTasks.length);
             if (res.data.code != 200) return this.$message.error("获取任务失败");
-            // 循环遍历 获取用户发布任务的详细信息
+            // // 循环遍历 获取用户发布任务的详细信息
             for (let i = 0; i < res.data.data.undoTasks.length; ++i) {
                 let params = new URLSearchParams();
                 params.append('taskId', res.data.data.undoTasks[i])
@@ -134,6 +136,15 @@ export default {
             let params = new URLSearchParams();
             params.append('taskId', id);
             this.$http.post('/file/upload', params);
+        },
+        // 控制上传文件大小
+        beforeUpload(file) {
+            var testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
+            const isLt10M = file.size / 1024 / 1024 < 50; //这里做文件大小限制
+            if (!isLt10M) {
+                this.$message.error("上传文件大小不能超过 50MB!");
+            }
+            return isLt10M;
         },
         // 刷新页面
         reload() {

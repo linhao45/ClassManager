@@ -19,10 +19,9 @@
                     background-color="#333744"
                     text-color="#fff"
                     active-text-color="#ffd04b"
-                    :default-active="activePath"
+                    default-active="/tasklaunch"
                     router
                     :collapse="isCollapse"
-                    :collapse-transition="true"
                 >
                     <el-menu-item index="/welcome" @click="saveNavState('/welcome')">
                         <i class="el-icon-s-home"></i>

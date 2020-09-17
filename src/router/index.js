@@ -38,17 +38,16 @@ const router = new VueRouter({
     routes
 })
 
-// router.beforeEach((to, from, next) => {
-//     console.log(to.path);
-//     if (to.path == '/admin') {
-//         return next();
-//     } else if (to.path !== '/login') {
-//         if (!window.sessionStorage.getItem('token')) return next('/login');
-//         else return next();
-//     } else if (to.path === '/login') {
-//         if (window.sessionStorage.getItem('token')) return next('/home');
-//         else return next();
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if (to.path == '/admin') {
+        return next();
+    } else if (to.path !== '/login') {
+        if (!window.sessionStorage.getItem('token')) return next('/login');
+        else return next();
+    } else if (to.path === '/login') {
+        if (window.sessionStorage.getItem('token')) return next('/home');
+        else return next();
+    }
+})
 
 export default router
